@@ -108,6 +108,18 @@ export default function TeacherDashboard() {
     }
   }
 
+  const handleRemoveCourse = async (course: Course) => {
+    const confirmed = typeof window !== 'undefined' && window.confirm(`确定撤销课程 "${course.title}" 吗？`)
+    if (!confirmed) return
+    setActioning(true)
+    try {
+      await fetch(`${API_BASE}/teachers/${TEACHER_ID}/courses/${course.id}`, { method: 'DELETE' })
+      await fetchAll()
+    } finally {
+      setActioning(false)
+    }
+  }
+
   const emptyState = loading ? '加载中...' : '暂无数据'
 
   return (
